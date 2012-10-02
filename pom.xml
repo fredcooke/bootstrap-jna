@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>parent</artifactId>
+		<groupId>org.diyefi</groupId>
+		<version>0.0.3</version>
+	</parent>
+
+	<groupId>com.fredcooke</groupId>
+	<artifactId>bootstrapjna</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>BootStrap JNA</name>
+	<description>Demo project for my friend Mike &lt;3</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	
+	<build>
+		<defaultGoal>install exec:exec</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>net.stickycode.plugins</groupId>
+				<artifactId>bootstrap-maven-plugin</artifactId>
+				<version>1.9</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>project</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>bin</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/runnable.xml</descriptor>
+							</descriptors>
+							<archive>
+								<manifest>
+									<mainClass>${project.groupId}.${project.artifactId}.demo.DemonstrateDecoding</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<executions>
+				</executions>
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+<!-- 						<argument>${project.initial.heap}</argument> -->
+<!-- 						<argument>${project.maximum.heap}</argument> -->
+						<argument>-jar</argument>
+						<argument>${project.basedir}/target/${project.artifactId}-${project.version}-bin.jar</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+			
+
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<configLocation>src/site/fredsChecks.xml</configLocation>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>2.7.1</version>
+				<configuration>
+					<minimumTokens>20</minimumTokens>
+					<targetJdk>1.6</targetJdk>
+					<rulesets> <!-- 2.7.1 uses 4.3 which has less rulesets than 5.0 http://pmd.sourceforge.net/pmd-4.3/rules/index.html -->
+						<!-- basic, unusedcode and imports are run by default but not if others are explicitly defined -->
+						<!-- Customise by copying ruleset.xml files from 4.3 release and removing unwanted rules. -->
+						<ruleset>/rulesets/basic.xml</ruleset>
+						<ruleset>/rulesets/braces.xml</ruleset>
+						<ruleset>/rulesets/clone.xml</ruleset>
+						<ruleset>${project.basedir}/src/site/pmd/rulesets/codesize.xml</ruleset>
+						<!-- ruleset>/rulesets/comments.xml</ruleset> <!- Not included in 4.3! Available in 5.0 -->
+						<ruleset>${project.basedir}/src/site/pmd/rulesets/controversial.xml</ruleset> <!-- Customise by removing various stupid rules! -->
+						<ruleset>/rulesets/coupling.xml</ruleset>
+						<ruleset>${project.basedir}/src/site/pmd/rulesets/design.xml</ruleset> <!-- Customise by removing ConfusingTernary test! -->
+						<!-- ruleset>/rulesets/empty.xml</ruleset> <!- Not included in 4.3! Available in 5.0 -->
+						<ruleset>/rulesets/finalizers.xml</ruleset>
+						<ruleset>/rulesets/imports.xml</ruleset>
+						<!-- ruleset>/rulesets/javabeans.xml</ruleset <!- Transient requirement is too aggressive. UID is handled in another plugin. -->
+						<ruleset>/rulesets/junit.xml</ruleset>
+						<!-- ruleset>/rulesets/naming.xml</ruleset Too aggressive! -->
+						<ruleset>/rulesets/optimizations.xml</ruleset>
+						<ruleset>/rulesets/sunsecure.xml</ruleset>
+						<ruleset>/rulesets/strictexception.xml</ruleset>
+						<ruleset>/rulesets/strings.xml</ruleset>
+						<ruleset>/rulesets/typeresolution.xml</ruleset>
+						<!-- ruleset>/rulesets/unnecessary.xml</ruleset> <!- Not included in 4.3! Available in 5.0 -->
+						<ruleset>/rulesets/unusedcode.xml</ruleset>
+					</rulesets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<dependencies>
+		<!-- Depends on JNA -->
+		<dependency>
+			<groupId>com.sparetimelabs</groupId>
+			<artifactId>purejavacomm</artifactId>
+			<version>0.0.8</version>
+		</dependency>
+	</dependencies>
+</project>
